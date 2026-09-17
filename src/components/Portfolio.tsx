@@ -1,10 +1,52 @@
 "use client";
 
 import { projects } from "@/data/content";
-import ProjectPreview from "@/components/ProjectPreview";
 import Reveal from "@/components/Reveal";
 
-/** Proiecte reale — randate doar în Matrix. */
+type Project = (typeof projects)[number];
+
+function ProjectShot({ project }: { project: Project }) {
+  const video = "video" in project ? project.video : undefined;
+  const headerFade = "headerFade" in project ? project.headerFade : undefined;
+
+  return (
+    <div className="relative aspect-[16/10] overflow-hidden bg-black">
+      {video ? (
+        <video
+          className="h-full w-full origin-center object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110"
+          src={video}
+          poster={project.image}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-label={`Preview ${project.title}`}
+        />
+      ) : (
+        <img
+          src={project.image}
+          alt={`Screenshot ${project.title}`}
+          className="h-full w-full origin-center object-cover object-top transition-transform duration-700 ease-out group-hover:scale-110"
+        />
+      )}
+      {video && headerFade ? (
+        <img
+          src={project.image}
+          alt=""
+          aria-hidden
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover object-top"
+          style={{
+            maskImage: `linear-gradient(to bottom, #000 ${headerFade}%, transparent ${headerFade + 4}%)`,
+            WebkitMaskImage: `linear-gradient(to bottom, #000 ${headerFade}%, transparent ${headerFade + 4}%)`,
+          }}
+        />
+      ) : null}
+    </div>
+  );
+}
+
+/** Proiecte reale — randate doar în Matrix, cu screenshot-uri live. */
 export default function Portfolio() {
   return (
     <section id="portofoliu" className="scroll-mt-24 border-t border-line">
@@ -21,17 +63,13 @@ export default function Portfolio() {
             <Reveal key={project.href} delay={index * 0.08}>
               <article className="pulse-live group overflow-hidden rounded-xl border border-line bg-surface transition-transform duration-500 hover:-translate-y-1 hover:border-accent/50">
                 <a href={project.href} target="_blank" rel="noreferrer" className="block">
-                  <div className="relative aspect-[16/10] overflow-hidden border-b border-line">
-                    <div className="absolute inset-x-0 top-0 z-10 flex items-center gap-1.5 bg-bg/80 px-3 py-2">
-                      <span className="h-2 w-2 rounded-full bg-[#ff5f56]" />
-                      <span className="h-2 w-2 rounded-full bg-[#ffbd2e]" />
-                      <span className="h-2 w-2 rounded-full bg-[#27c93f]" />
-                      <span className="ml-2 font-mono text-[10px] text-muted">{project.host}</span>
-                    </div>
-                    <div className="h-full origin-center pt-8 transition-transform duration-700 ease-out group-hover:scale-110">
-                      <ProjectPreview kind={project.preview} />
-                    </div>
+                  <div className="flex items-center gap-1.5 border-b border-line bg-bg/80 px-3 py-2">
+                    <span className="h-2 w-2 rounded-full bg-[#ff5f56]" />
+                    <span className="h-2 w-2 rounded-full bg-[#ffbd2e]" />
+                    <span className="h-2 w-2 rounded-full bg-[#27c93f]" />
+                    <span className="ml-2 font-mono text-[10px] text-muted">{project.host}</span>
                   </div>
+                  <ProjectShot project={project} />
                 </a>
 
                 <div className="flex flex-col p-5">

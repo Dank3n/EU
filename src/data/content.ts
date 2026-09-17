@@ -75,7 +75,10 @@ export const projects = [
     tags: ["Website", "E-commerce"],
     href: "https://luvyer.com",
     host: "luvyer.com",
-    preview: "luvyer" as const,
+    image: "/projects/luvyer.jpg",
+    video:
+      "https://luvyer.com/cdn/shop/videos/c/vp/0e5dbda887fe4f6e814cb4f9e531d8cb/0e5dbda887fe4f6e814cb4f9e531d8cb.HD-720p-4.5Mbps-88333852.mp4?v=0",
+    headerFade: 17,
   },
   {
     number: "02",
@@ -86,7 +89,7 @@ export const projects = [
     tags: ["Website", "Restaurant"],
     href: "https://mishi-bufet-8qbx.vercel.app",
     host: "mishi-bufet-8qbx.vercel.app",
-    preview: "mishi" as const,
+    image: "/projects/mishi.jpg",
   },
   {
     number: "03",
@@ -97,7 +100,9 @@ export const projects = [
     tags: ["Website", "Restaurant"],
     href: "https://junglebistro.ro",
     host: "junglebistro.ro",
-    preview: "jungle" as const,
+    image: "/projects/jungle.jpg",
+    video: "https://junglebistro.ro/videos/jungle-bistro.mp4?v=4",
+    headerFade: 12,
   },
   {
     number: "04",
@@ -108,7 +113,9 @@ export const projects = [
     tags: ["Website", "Restaurant"],
     href: "https://www.pekin.ro",
     host: "pekin.ro",
-    preview: "pekin" as const,
+    image: "/projects/pekin.jpg",
+    video: "/projects/pekin.mp4",
+    headerFade: 13,
   },
   {
     number: "05",
@@ -119,7 +126,7 @@ export const projects = [
     tags: ["Website", "Restaurant"],
     href: "https://burgers-red.vercel.app",
     host: "burgers-red.vercel.app",
-    preview: "burgers" as const,
+    image: "/projects/burgers.jpg",
   },
   {
     number: "06",
@@ -130,6 +137,6 @@ export const projects = [
     tags: ["Website", "Medical"],
     href: "https://cardiologie-yq6b.vercel.app",
     host: "cardiologie-yq6b.vercel.app",
-    preview: "cardio" as const,
+    image: "/projects/cardio.jpg",
   },
 ] as const;

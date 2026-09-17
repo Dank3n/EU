@@ -44,7 +44,7 @@ export function SecretModeProvider({ children }: { children: ReactNode }) {
   const registerLogoTap = useCallback(() => {
     const now = Date.now();
     taps.current = [...taps.current.filter((stamp) => now - stamp < TAP_WINDOW_MS), now];
-    if (taps.current.length >= 5) {
+    if (taps.current.length >= 2) {
       taps.current = [];
       toggle();
     }
