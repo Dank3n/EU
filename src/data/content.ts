@@ -79,6 +79,17 @@ export const projects = [
   },
   {
     number: "02",
+    title: "Mishi Bufet",
+    type: "Restaurant",
+    description:
+      "Bufet asiatic și sushi train lângă Mega Mall: all you can eat, combo-uri și bandă live cu nigiri & maki.",
+    tags: ["Website", "Restaurant"],
+    href: "https://mishi-bufet-8qbx.vercel.app",
+    host: "mishi-bufet-8qbx.vercel.app",
+    preview: "mishi" as const,
+  },
+  {
+    number: "03",
     title: "Jungle Bistro",
     type: "Restaurant",
     description:
@@ -89,7 +100,7 @@ export const projects = [
     preview: "jungle" as const,
   },
   {
-    number: "03",
+    number: "04",
     title: "Restaurant Pekin",
     type: "Restaurant",
     description:
@@ -100,7 +111,18 @@ export const projects = [
     preview: "pekin" as const,
   },
   {
-    number: "04",
+    number: "05",
+    title: "Burger's Records",
+    type: "Restaurant",
+    description:
+      "Burgeri artizanali și atmosferă de vinil: carne maturată, sosuri de casă și un spațiu cu rafturi de LP-uri.",
+    tags: ["Website", "Restaurant"],
+    href: "https://burgers-red.vercel.app",
+    host: "burgers-red.vercel.app",
+    preview: "burgers" as const,
+  },
+  {
+    number: "06",
     title: "Cabinet de Cardiologie",
     type: "Medical",
     description:

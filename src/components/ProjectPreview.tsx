@@ -1,6 +1,6 @@
 "use client";
 
-type PreviewKind = "jungle" | "pekin" | "cardio" | "luvyer";
+type PreviewKind = "jungle" | "pekin" | "cardio" | "luvyer" | "mishi" | "burgers";
 
 /** Preview stilizat pe brand, cu zoom la hover. */
 export default function ProjectPreview({ kind }: { kind: PreviewKind }) {
@@ -28,6 +28,34 @@ export default function ProjectPreview({ kind }: { kind: PreviewKind }) {
           <div className="bg-[#5c1212]" />
           <div className="bg-[#c43b2c]/80" />
           <div className="bg-[#2a0f0f]" />
+        </div>
+      </div>
+    );
+  }
+
+  if (kind === "mishi") {
+    return (
+      <div className="flex h-full flex-col bg-[#0c0c0c] p-4">
+        <div className="mb-3 h-3 w-20 bg-[#e11d2e]" />
+        <div className="mb-3 h-8 w-2/3 bg-[#f5f5f5]/90" />
+        <div className="flex flex-1 items-center gap-2">
+          <div className="h-10 w-10 rounded-full bg-[#f4e6d4]" />
+          <div className="h-10 w-10 rounded-full bg-[#c45c4a]" />
+          <div className="h-10 w-10 rounded-full bg-[#f4e6d4]" />
+          <div className="h-10 w-10 rounded-full bg-[#2a2a2a] ring-1 ring-[#e11d2e]" />
+        </div>
+      </div>
+    );
+  }
+
+  if (kind === "burgers") {
+    return (
+      <div className="flex h-full flex-col bg-[#1a100c] p-4">
+        <div className="mb-3 h-3 w-24 bg-[#c9a227]" />
+        <div className="grid flex-1 grid-cols-3 gap-2">
+          <div className="bg-[#6b2a1a]" />
+          <div className="bg-[#c43b22]" />
+          <div className="bg-[#3d2418]" />
         </div>
       </div>
     );
