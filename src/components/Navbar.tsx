@@ -38,7 +38,7 @@ export default function Navbar() {
           <a
             href="#top"
             onPointerDown={registerLogoTap}
-            className="select-none font-mono text-sm tracking-[0.22em] text-fg neon [touch-action:manipulation]"
+            className="select-none font-mono text-2xl tracking-[0.18em] text-fg neon [touch-action:manipulation] sm:text-3xl"
             aria-label={`${site.name} — logo`}
           >
             {logo}
