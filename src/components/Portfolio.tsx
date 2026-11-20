@@ -1,13 +1,57 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { projects } from "@/data/content";
 import Reveal from "@/components/Reveal";
 
 type Project = (typeof projects)[number];
 
+const EMBED_W = 1440;
+const EMBED_H = 900;
+
+function ScaledEmbed({ src, poster, title }: { src: string; poster: string; title: string }) {
+  const frame = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(0.28);
+
+  useEffect(() => {
+    const node = frame.current;
+    if (!node) return;
+
+    const update = () => setScale(node.clientWidth / EMBED_W);
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={frame} className="relative aspect-[16/10] overflow-hidden bg-black">
+      <img
+        src={poster}
+        alt=""
+        aria-hidden
+        className="absolute inset-0 h-full w-full object-cover object-top"
+      />
+      <iframe
+        src={src}
+        title={`Preview live ${title}`}
+        tabIndex={-1}
+        loading="lazy"
+        className="pointer-events-none absolute left-0 top-0 origin-top-left border-0"
+        style={{ width: EMBED_W, height: EMBED_H, transform: `scale(${scale})` }}
+      />
+    </div>
+  );
+}
+
 function ProjectShot({ project }: { project: Project }) {
   const video = "video" in project ? project.video : undefined;
   const headerFade = "headerFade" in project ? project.headerFade : undefined;
+  const embed = "embed" in project && project.embed;
+
+  if (embed) {
+    return <ScaledEmbed src={project.href} poster={project.image} title={project.title} />;
+  }
 
   return (
     <div className="relative aspect-[16/10] overflow-hidden bg-black">

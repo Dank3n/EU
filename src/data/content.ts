@@ -90,6 +90,8 @@ export const projects = [
     href: "https://mishi-bufet-8qbx.vercel.app",
     host: "mishi-bufet-8qbx.vercel.app",
     image: "/projects/mishi.jpg",
+    video: "https://mishi-bufet-8qbx.vercel.app/videos/hero.mp4",
+    headerFade: 11,
   },
   {
     number: "03",
@@ -114,8 +116,7 @@ export const projects = [
     href: "https://www.pekin.ro",
     host: "pekin.ro",
     image: "/projects/pekin.jpg",
-    video: "/projects/pekin.mp4",
-    headerFade: 13,
+    embed: true,
   },
   {
     number: "05",
