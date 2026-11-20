@@ -1,82 +1,98 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { projects } from "@/data/content";
 import Reveal from "@/components/Reveal";
 
 type Project = (typeof projects)[number];
 
-const EMBED_W = 1440;
-const EMBED_H = 900;
-
-function ScaledEmbed({ src, poster, title }: { src: string; poster: string; title: string }) {
-  const frame = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(0.28);
-
-  useEffect(() => {
-    const node = frame.current;
-    if (!node) return;
-
-    const update = () => setScale(node.clientWidth / EMBED_W);
-    update();
-    const observer = new ResizeObserver(update);
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
+function PekinShot({ project }: { project: Project }) {
+  const tag = "tag" in project ? project.tag : undefined;
 
   return (
-    <div ref={frame} className="relative aspect-[16/10] overflow-hidden bg-black">
+    <div className="relative aspect-[16/10] overflow-hidden bg-[#0a0908]">
       <img
-        src={poster}
+        src={project.image}
         alt=""
         aria-hidden
-        className="absolute inset-0 h-full w-full object-cover object-top"
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover object-top"
+        style={{
+          maskImage: "linear-gradient(to bottom, #000 13%, transparent 18%)",
+          WebkitMaskImage: "linear-gradient(to bottom, #000 13%, transparent 18%)",
+        }}
       />
-      <iframe
-        src={src}
-        title={`Preview live ${title}`}
-        tabIndex={-1}
-        loading="lazy"
-        className="pointer-events-none absolute left-0 top-0 origin-top-left border-0"
-        style={{ width: EMBED_W, height: EMBED_H, transform: `scale(${scale})` }}
-      />
+      <div className="absolute inset-x-0 top-[6%] flex justify-center">
+        <div className="pekin-swing flex w-[22%] flex-col items-center">
+          <span className="h-10 w-px bg-[#6b5d4f] sm:h-14" />
+          {tag ? (
+            <img src={tag} alt="" className="w-full shadow-[8px_18px_28px_rgba(0,0,0,0.55)]" />
+          ) : null}
+        </div>
+      </div>
     </div>
   );
 }
 
-function ProjectShot({ project }: { project: Project }) {
-  const video = "video" in project ? project.video : undefined;
-  const headerFade = "headerFade" in project ? project.headerFade : undefined;
-  const embed = "embed" in project && project.embed;
+function HeroVideo({
+  src,
+  poster,
+  headerFade,
+  title,
+}: {
+  src: string;
+  poster: string;
+  headerFade?: number;
+  title: string;
+}) {
+  const videoRef = useRef<HTMLVideoElement>(null);
 
-  if (embed) {
-    return <ScaledEmbed src={project.href} poster={project.image} title={project.title} />;
-  }
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    let visible = false;
+
+    const sync = () => {
+      if (document.hidden || !visible) {
+        video.pause();
+        return;
+      }
+      video.play().catch(() => undefined);
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting && entry.intersectionRatio >= 0.2;
+        sync();
+      },
+      { threshold: [0, 0.2, 0.5] },
+    );
+    observer.observe(video);
+    document.addEventListener("visibilitychange", sync);
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", sync);
+      video.pause();
+    };
+  }, []);
 
   return (
     <div className="relative aspect-[16/10] overflow-hidden bg-black">
-      {video ? (
-        <video
-          className="h-full w-full origin-center object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110"
-          src={video}
-          poster={project.image}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          aria-label={`Preview ${project.title}`}
-        />
-      ) : (
+      <video
+        ref={videoRef}
+        className="h-full w-full origin-center object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110"
+        src={src}
+        poster={poster}
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        aria-label={`Preview ${title}`}
+      />
+      {headerFade ? (
         <img
-          src={project.image}
-          alt={`Screenshot ${project.title}`}
-          className="h-full w-full origin-center object-cover object-top transition-transform duration-700 ease-out group-hover:scale-110"
-        />
-      )}
-      {video && headerFade ? (
-        <img
-          src={project.image}
+          src={poster}
           alt=""
           aria-hidden
           className="pointer-events-none absolute inset-0 h-full w-full object-cover object-top"
@@ -86,6 +102,32 @@ function ProjectShot({ project }: { project: Project }) {
           }}
         />
       ) : null}
+    </div>
+  );
+}
+
+function ProjectShot({ project }: { project: Project }) {
+  const video = "video" in project ? project.video : undefined;
+  const headerFade = "headerFade" in project ? project.headerFade : undefined;
+  const tag = "tag" in project ? project.tag : undefined;
+
+  if (tag) {
+    return <PekinShot project={project} />;
+  }
+
+  if (video) {
+    return (
+      <HeroVideo src={video} poster={project.image} headerFade={headerFade} title={project.title} />
+    );
+  }
+
+  return (
+    <div className="relative aspect-[16/10] overflow-hidden bg-black">
+      <img
+        src={project.image}
+        alt={`Screenshot ${project.title}`}
+        className="h-full w-full origin-center object-cover object-top transition-transform duration-700 ease-out group-hover:scale-110"
+      />
     </div>
   );
 }

@@ -123,12 +123,28 @@ body {
   0%,
   100% {
     box-shadow: 0 0 0 0 rgba(57, 255, 20, 0.35);
-    transform: translateY(0);
   }
   50% {
     box-shadow: 0 0 28px 2px rgba(57, 255, 20, 0.25);
-    transform: translateY(-3px);
   }
+}
+
+@keyframes pekin-swing {
+  0% {
+    transform: rotate(-8deg);
+  }
+  50% {
+    transform: rotate(7deg);
+  }
+  100% {
+    transform: rotate(-8deg);
+  }
+}
+
+.pekin-swing {
+  animation: pekin-swing 3.4s ease-in-out infinite;
+  transform-origin: top center;
+  will-change: transform;
 }
 
 @keyframes glitch {
@@ -181,7 +197,8 @@ body {
 
   .glitch,
   .flicker,
-  .pulse-live {
+  .pulse-live,
+  .pekin-swing {
     animation: none !important;
   }
 }

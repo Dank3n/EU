@@ -31,15 +31,24 @@ export function SecretModeProvider({ children }: { children: ReactNode }) {
   const dKeys = useRef<number[]>([]);
   const flashTimer = useRef<number | null>(null);
 
+  const jumpToHero = useCallback(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    document.getElementById("top")?.scrollIntoView({ block: "start", behavior: "auto" });
+    if (window.location.hash !== "#top") {
+      history.replaceState(null, "", `${window.location.pathname}${window.location.search}#top`);
+    }
+  }, []);
+
   const toggle = useCallback(() => {
     setMatrix((current) => {
       const next = !current;
       setFlash(next ? "granted" : "terminated");
       if (flashTimer.current) window.clearTimeout(flashTimer.current);
       flashTimer.current = window.setTimeout(() => setFlash(null), 1100);
+      if (next) jumpToHero();
       return next;
     });
-  }, []);
+  }, [jumpToHero]);
 
   const registerLogoTap = useCallback(() => {
     const now = Date.now();
@@ -53,7 +62,16 @@ export function SecretModeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     document.documentElement.dataset.mode = matrix ? "matrix" : "pro";
     document.title = matrix ? site.matrix.title : "Nica Daniel — Web Developer";
-  }, [matrix]);
+    if (!matrix) return;
+
+    jumpToHero();
+    const frame = window.requestAnimationFrame(jumpToHero);
+    const later = window.setTimeout(jumpToHero, 80);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearTimeout(later);
+    };
+  }, [matrix, jumpToHero]);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {

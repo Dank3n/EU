@@ -17,49 +17,60 @@ export default function MatrixRain() {
     if (!context) return;
 
     const glyphs = "01NICADANIEL#$%<>/\\|";
+    const step = 20;
     let columns = 0;
     let drops: number[] = [];
     let frame = 0;
     let raf = 0;
+    let hidden = document.hidden;
 
     function resize() {
       if (!canvas) return;
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      columns = Math.floor(canvas.width / 16);
+      const width = Math.min(window.innerWidth, 1440);
+      const height = Math.min(window.innerHeight, 900);
+      canvas.width = width;
+      canvas.height = height;
+      columns = Math.floor(width / step);
       drops = Array.from({ length: columns }, () => Math.random() * -40);
     }
 
     function draw() {
       if (!canvas || !context) return;
-      context.fillStyle = "rgba(0, 0, 0, 0.08)";
-      context.fillRect(0, 0, canvas.width, canvas.height);
-      context.fillStyle = "#39ff14";
-      context.font = "14px ui-monospace, monospace";
+      raf = window.requestAnimationFrame(draw);
+      if (hidden) return;
 
       frame += 1;
-      if (frame % 2 === 0) {
-        drops.forEach((y, index) => {
-          const char = glyphs[Math.floor(Math.random() * glyphs.length)];
-          context.fillText(char, index * 16, y * 16);
-          if (y * 16 > canvas.height && Math.random() > 0.975) {
-            drops[index] = 0;
-          } else {
-            drops[index] = y + 1;
-          }
-        });
-      }
+      if (frame % 3 !== 0) return;
 
-      raf = window.requestAnimationFrame(draw);
+      context.fillStyle = "rgba(0, 0, 0, 0.1)";
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      context.fillStyle = "#39ff14";
+      context.font = "13px ui-monospace, monospace";
+
+      drops.forEach((y, index) => {
+        const char = glyphs[Math.floor(Math.random() * glyphs.length)];
+        context.fillText(char, index * step, y * step);
+        if (y * step > canvas.height && Math.random() > 0.975) {
+          drops[index] = 0;
+        } else {
+          drops[index] = y + 1;
+        }
+      });
+    }
+
+    function onVisibility() {
+      hidden = document.hidden;
     }
 
     resize();
     draw();
     window.addEventListener("resize", resize);
+    document.addEventListener("visibilitychange", onVisibility);
 
     return () => {
       window.cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
+      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, [matrix]);
 

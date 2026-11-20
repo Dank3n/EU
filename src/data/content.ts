@@ -116,7 +116,7 @@ export const projects = [
     href: "https://www.pekin.ro",
     host: "pekin.ro",
     image: "/projects/pekin.jpg",
-    embed: true,
+    tag: "/projects/pekin-tag.png",
   },
   {
     number: "05",
