@@ -14,7 +14,7 @@ function wrap(index: number) {
 }
 
 function phoneSrc(project: Project) {
-  return "phoneImage" in project ? project.phoneImage : project.image;
+  return project.phoneImage;
 }
 
 function chromeMask(percent: number) {

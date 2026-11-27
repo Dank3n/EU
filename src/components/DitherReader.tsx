@@ -163,6 +163,8 @@ export default function DitherReader({ active }: { active: boolean }) {
 
     const ctx = canvas.getContext("2d", { alpha: false });
     if (!ctx) return;
+    const surface = canvas;
+    const gfx = ctx;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const image = new Image();
@@ -180,7 +182,7 @@ export default function DitherReader({ active }: { active: boolean }) {
     const particles: Particle[] = [];
 
     function resize() {
-      const node = canvas.parentElement;
+      const node = surface.parentElement;
       if (!node) return;
       const nextW = Math.max(1, Math.floor(node.clientWidth));
       const nextH = Math.max(1, Math.floor(node.clientHeight));
@@ -188,11 +190,11 @@ export default function DitherReader({ active }: { active: boolean }) {
       const scale = Math.min(1, cap / Math.max(nextW, nextH));
       width = Math.max(1, Math.floor(nextW * scale));
       height = Math.max(1, Math.floor(nextH * scale));
-      canvas.width = width;
-      canvas.height = height;
-      canvas.style.width = `${nextW}px`;
-      canvas.style.height = `${nextH}px`;
-      prepared = image.complete ? ditherFrame(ctx, width, height, image) : null;
+      surface.width = width;
+      surface.height = height;
+      surface.style.width = `${nextW}px`;
+      surface.style.height = `${nextH}px`;
+      prepared = image.complete ? ditherFrame(gfx, width, height, image) : null;
       intact = prepared ? new Uint8ClampedArray(prepared.bitmap.data) : null;
       particles.length = 0;
     }
@@ -203,7 +205,7 @@ export default function DitherReader({ active }: { active: boolean }) {
       frame += 1;
       if (frame % 2 !== 0) return;
 
-      ctx.putImageData(prepared.bitmap, 0, 0);
+      gfx.putImageData(prepared.bitmap, 0, 0);
 
       if (reduced) return;
 
@@ -233,8 +235,8 @@ export default function DitherReader({ active }: { active: boolean }) {
         }
       }
 
-      ctx.fillStyle = "#ecece8";
-      ctx.textBaseline = "middle";
+      gfx.fillStyle = "#ecece8";
+      gfx.textBaseline = "middle";
       for (let i = particles.length - 1; i >= 0; i -= 1) {
         const p = particles[i];
         p.life += 1;
@@ -249,19 +251,19 @@ export default function DitherReader({ active }: { active: boolean }) {
           particles.splice(i, 1);
           continue;
         }
-        ctx.globalAlpha = (1 - t) * (1 - t * 0.35);
+        gfx.globalAlpha = (1 - t) * (1 - t * 0.35);
         if (p.glyph) {
-          ctx.save();
-          ctx.translate(p.x, p.y);
-          ctx.rotate(p.rot);
-          ctx.font = `${p.size}px ui-monospace, "IBM Plex Mono", monospace`;
-          ctx.fillText(p.glyph, 0, 0);
-          ctx.restore();
+          gfx.save();
+          gfx.translate(p.x, p.y);
+          gfx.rotate(p.rot);
+          gfx.font = `${p.size}px ui-monospace, "IBM Plex Mono", monospace`;
+          gfx.fillText(p.glyph, 0, 0);
+          gfx.restore();
         } else {
-          ctx.fillRect(p.x, p.y, p.size, p.size);
+          gfx.fillRect(p.x, p.y, p.size, p.size);
         }
       }
-      ctx.globalAlpha = 1;
+      gfx.globalAlpha = 1;
     }
 
     function onVisibility() {
@@ -274,12 +276,12 @@ export default function DitherReader({ active }: { active: boolean }) {
       },
       { threshold: [0, 0.12, 0.4] },
     );
-    observer.observe(canvas);
+    observer.observe(surface);
 
     image.onload = () => {
       resize();
       if (reduced && prepared) {
-        ctx.putImageData(prepared.bitmap, 0, 0);
+        gfx.putImageData(prepared.bitmap, 0, 0);
         return;
       }
       tick();
