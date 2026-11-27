@@ -26,3 +26,8 @@ Completează placeholder-ele din `src/data/content.ts`:
 - `src/app` — layout-ul și pagina principală
 - `src/components` — Hero, Despre, Abilități, Portofoliu, Contact, Footer
 - `src/data/content.ts` — text, skill-uri și proiecte
+
+## Cursor Agent Skills
+
+General-purpose Cursor skills live in `.cursor/skills/` (agents + `/` workflows). See [`.cursor/README.md`](.cursor/README.md) and [`.cursor/WORLDFLOWAI.md`](.cursor/WORLDFLOWAI.md).
+
