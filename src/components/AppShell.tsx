@@ -35,7 +35,7 @@ function Experience() {
       {booting && <Preloader onDone={onDone} />}
       <AccessFlash />
       <MatrixRain />
-      <div className="grid-bg" aria-hidden="true" />
+      {matrix ? <div className="grid-bg" aria-hidden="true" /> : null}
       <div className="noise" aria-hidden="true" />
       <div className="scanlines" aria-hidden="true" />
 
